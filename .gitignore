@@ -8,6 +8,12 @@
 # Java class files
 *.class
 
+# Scripts
+*.sh
+
+# Temporary files
+*~
+
 # generated files
 bin/
 gen/
