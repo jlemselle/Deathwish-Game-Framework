@@ -21,10 +21,12 @@
 
 package com.deathwish.framework;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -43,10 +45,29 @@ public class GameView extends SurfaceView implements Runnable {
 	public GameView(DwActivity parent) {
 		// View constructor
 		super(parent);
-		// Get surface's holder.
-		vHolder = getHolder();
-		// Activity
-		activity = parent;
+		init(parent);
+		
+	}
+	
+	public GameView(DwActivity parent, AttributeSet attrs) {
+		// View constructor
+		super(parent, attrs);
+		init(parent);
+	}
+	
+	public GameView(DwActivity parent, AttributeSet attrs, int defStyle) {
+		// View constructor
+		super(parent, attrs, defStyle);
+		init(parent);
+	}
+	
+	private void init(DwActivity parent) {
+		if (!(isInEditMode())) {
+			// Get surface's holder.
+			vHolder = getHolder();
+			// Activity
+			activity = parent;
+		}
 	}
 
 	@Override
@@ -63,7 +84,7 @@ public class GameView extends SurfaceView implements Runnable {
 				service.onLoop();
 			}
 			activity.onGameLoop();
-			// Unlock, draw, then relock the canvas.
+			// Unlock, draw, then re-lock the canvas.
 			Canvas c = vHolder.lockCanvas();
 			// Clear the screen.
 			c.drawColor(Color.BLACK);
@@ -106,8 +127,7 @@ public class GameView extends SurfaceView implements Runnable {
 		// Add text
 	    Paint paint = new Paint(); 
 	    paint.setAntiAlias(true);
-	    paint.setFakeBoldText(true);               // if you like bold
-	    paint.setShadowLayer(5, 5, 5, Color.GRAY); // add shadow
+	    paint.setFakeBoldText(true); // if you like bold
 	    paint.setColor(Color.WHITE); 
 	    paint.setTextSize(30);
 	    c.drawText("FPS: " + activity.cachedFPS, 10, 35, paint);
@@ -131,7 +151,7 @@ public class GameView extends SurfaceView implements Runnable {
 		vThread = null;
 	}
 	
-	@SuppressLint("NewApi")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void lightsOut() {
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			// Honeycomb or newer! :D
@@ -140,5 +160,11 @@ public class GameView extends SurfaceView implements Runnable {
 			// Not cool enough for soft buttons :(
 		}
 		
+	}
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		activity.onSizeChanged(w, h, oldw, oldh);
 	}
 }

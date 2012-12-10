@@ -79,6 +79,13 @@ public class Sprite {
 		return (int) y;
 	}
 	
+	public int getHeight() {
+		return (int) image.getHeight();
+	}
+	public int getWidth() {
+		return (int) image.getWidth();
+	}
+	
 	public void setPaint(Paint paint) {
 		this.paint = paint;
 	}

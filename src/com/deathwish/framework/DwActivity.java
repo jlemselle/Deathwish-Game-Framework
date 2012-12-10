@@ -52,11 +52,12 @@ public class DwActivity extends Activity {
 		view = new GameView(this);
 		// Initialise our frame rate tracker
 		fpsTracker = new FrameRateTracker();
-		// Initialise fps cache
+		// Initialise FPS cache
 		cachedFPS = "";
 		// Initialise our cache timer to 20 frames
 		cacheUpdateTimer = new Timer(20);
 		
+		onWindowConfig();
 		// request landscape orientation
 		if (isLandscape) {
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -92,12 +93,15 @@ public class DwActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
 		// Create the view.
 		view.Create();
+		
 		// create each service
 		for (Service service : serviceList) {
 			service.onCreate();
 		}
+		
 		// Create the game
 		onGameCreate();
 	}
@@ -119,6 +123,8 @@ public class DwActivity extends Activity {
 	// GAME OVERRIDEN METHODS
 	////////////////////////////////////////////////
 	
+	public void onWindowConfig() {}
+	public void onSizeChanged(int w, int h, int oldw, int oldh) {}
 	public void onGameCreate() {}
 	public void onGameLoop() {}
 	public void onGameDraw(Canvas c) {}
